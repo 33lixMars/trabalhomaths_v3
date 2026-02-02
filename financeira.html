@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Calculadora Financeira - Trabalho de Matemática 11º Inforgest</title>
+</head>
+<body>
+    <nav class="nav-bar" aria-label="Main navigation">
+        <div class="nav-inner">
+            <a class="brand" href="./maths.html">Calculadora</a>
+            <button class="nav-toggle" aria-expanded="false" aria-label="Open menu">
+                <span class="hamburger"></span>
+            </button>
+            <ul class="nav-links" role="menubar">
+                <li role="none"><a role="menuitem" href="maths.html">Científica</a></li>
+                <li role="none"><a role="menuitem" href="financeira.html">Financeira</a></li>
+                <li class="dropdown" role="none">
+                    <button class="drop-btn" aria-haspopup="true" aria-expanded="false">Análise de Balanço ▾</button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li role="none"><a role="menuitem" href="b-patrimonial.html">Balanço Patrimonial</a></li>
+                        <li role="none"><a role="menuitem" href="b-sintetico.html">Balanço Sintético</a></li>
+                        <li role="none"><a role="menuitem" href="b-analitico.html">Balanço Analítico</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown" role="none">
+                    <button class="drop-btn" aria-haspopup="true" aria-expanded="false">Sucessões ▾</button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li role="none"><a role="menuitem" href="s-geometrica.html">Geométrica (PG)</a></li>
+                        <li role="none"><a role="menuitem" href="s-aritmetica.html">Aritmética (PA)</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="sucessoes-container">
+        <h2 class="balanco-title"> Calculadora Financeira</h2>
+        
+        <div class="balanco-grid" style="margin-bottom: 40px;">
+            <div>
+                <h3>Juros Simples</h3>
+                <div class="form-group">
+                    <label>Capital Inicial (Kz):</label>
+                    <input type="number" id="capitalSimples" placeholder="Ex: 1000000">
+                </div>
+                <div class="form-group">
+                    <label>Taxa de Juros (% ao ano):</label>
+                    <input type="number" id="taxaSimples" step="0.01" placeholder="Ex: 15">
+                </div>
+                <div class="form-group">
+                    <label>Período (anos):</label>
+                    <input type="number" id="periodoSimples" step="0.1" placeholder="Ex: 2">
+                </div>
+                <button class="btn-calcular" onclick="calcularJurosSimples()">Calcular Juros Simples</button>
+                <div id="resultSimples" class="result-box"></div>
+            </div>
+
+            <div>
+                <h3>Juros Compostos</h3>
+                <div class="form-group">
+                    <label>Capital Inicial (Kz):</label>
+                    <input type="number" id="capitalComposto" placeholder="Ex: 1000000">
+                </div>
+                <div class="form-group">
+                    <label>Taxa de Juros (% ao ano):</label>
+                    <input type="number" id="taxaComposto" step="0.01" placeholder="Ex: 15">
+                </div>
+                <div class="form-group">
+                    <label>Período (anos):</label>
+                    <input type="number" id="periodoComposto" step="0.1" placeholder="Ex: 2">
+                </div>
+                <button class="btn-calcular" onclick="calcularJurosCompostos()">Calcular Juros Compostos</button>
+                <div id="resultComposto" class="result-box"></div>
+            </div>
+        </div>
+
+        <div style="margin-top: 40px;">
+            <h3>Amortização (Sistema Price)</h3>
+            <div class="balanco-grid">
+                <div class="form-group">
+                    <label>Valor do Empréstimo (Kz):</label>
+                    <input type="number" id="valorEmprestimo" placeholder="Ex: 5000000">
+                </div>
+                <div class="form-group">
+                    <label>Taxa Mensal (%):</label>
+                    <input type="number" id="taxaMensal" step="0.01" placeholder="Ex: 1.5">
+                </div>
+                <div class="form-group">
+                    <label>Número de Parcelas:</label>
+                    <input type="number" id="numParcelas" placeholder="Ex: 24">
+                </div>
+            </div>
+            <button class="btn-calcular" onclick="calcularAmortizacao()">Calcular Amortização</button>
+            <div id="resultAmortizacao" class="result-box"></div>
+        </div>
+    </div>
+
+    <div class="calculator-about">
+        <div class="calculator-about_wrapper">
+            <h2 id="cont">Tabela de Conteúdos</h2>
+            <ul class="lista-con">
+                <li><a href="#TVM">Tempo de Valor Monetário (TVM)</a></li>
+                <li><a href="#juros">Juros Simples e Compostos</a></li>
+                <li><a href="#sis-price">Amortização (Sistema Price)</a></li>
+                <li><a href="#importance">A Importância da Calculadora Financeira</a></li>
+            </ul>
+
+            <h2 id="TVM" style="text-align: center; margin-top: 40px;">Valor do Dinheiro no Tempo (TVM)</h2>
+            
+            <p>Imagine que alguém lhe deve 500 Kz. Você prefere receber esse dinheiro de uma só vez agora ou em quatro parcelas ao longo de um ano? E se você tivesse que esperar o pagamento inteiro em vez de receber tudo de uma vez? Você acha que o atraso no pagamento custa algo?</p>
+            
+            <p>Você provavelmente vai querer todo o dinheiro rapidamente por causa do conceito de "valor do dinheiro no tempo". A noção de "valor do dinheiro no tempo" afirma que um kwanza possuído hoje é mais valioso do que um kwanza prometido no futuro.</p>
+            
+            <h2 id="juros" style="margin-top: 35px;">Juros Simples e Compostos</h2>
+            
+            <p><strong>Juros Simples:</strong> Os juros são calculados apenas sobre o capital inicial. A fórmula é: J = C × i × t, onde J é o juro, C é o capital, i é a taxa e t é o tempo.</p>
+            
+            <p><strong>Juros Compostos:</strong> Os juros são calculados sobre o capital mais os juros acumulados. A fórmula é: M = C × (1 + i)^t, onde M é o montante final.</p>
+            
+            <h2 id="sis-price" style="margin-top: 35px;">Amortização (Sistema Price)</h2>
+
+            <p>O Sistema Price (ou Tabela Price) é um método de amortização onde as parcelas são fixas durante todo o contrato. Ele é muito comum em financiamentos de veículos e crédito pessoal, pois permite que você saiba exatamente quanto vai pagar do início ao fim, facilitando o controle do bolso.</p>
+
+<p>O segredo está na composição da parcela: No começo, quase todo o valor que você paga é para cobrir os juros, e apenas uma pequena parte abate a dívida real. Com o passar dos meses, os juros diminuem e a amortização (o pagamento da dívida em si) aumenta, mantendo o boleto sempre com o mesmo valor final, como explicado pelo Portal de Finanças.</p>
+
+<p>Em comparação ao sistema SAC (onde as parcelas diminuem), a Tabela Price tem a vantagem de ter prestações iniciais mais baratas, mas o custo total de juros ao final do plano costuma ser maior.</p>
+
+            <h2 id="importance" style="margin-top: 35px;">A Importância da Calculadora Financeira</h2>
+            
+            <p>A importância da calculadora financeira reside, primariamente, em sua capacidade de transformar complexidade em clareza.</p>
+            
+            <p>Ela é uma ferramenta indispensável para a análise do valor do dinheiro no tempo, uma premissa fundamental em todas as áreas de finanças. Ao automatizar cálculos de juros compostos, taxas de retorno, amortização de dívidas e fluxos de caixa, ela permite que profissionais e indivíduos avaliem o custo real de um financiamento ou o retorno potencial de um investimento de forma rápida e precisa.</p>
+            
+            <p>Além da velocidade, o valor central da calculadora é o apoio à tomada de decisão informada. Ela permite que o usuário simule diversos cenários financeiros, alterando variáveis como a taxa de juros, o prazo ou o valor da parcela, para determinar o impacto dessas mudanças no resultado final.</p>
+        </div>
+    </div>
+
+    <footer>&copy; 2025-26 Grupo Nº1 Inforgest - Trabalho de Matemática</footer>
+
+    <script src="nav.js"></script>
+    <script>
+        function formatarMoeda(valor) {
+            return valor.toLocaleString('pt-AO', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function calcularJurosSimples() {
+            const capital = parseFloat(document.getElementById('capitalSimples').value);
+            const taxa = parseFloat(document.getElementById('taxaSimples').value);
+            const periodo = parseFloat(document.getElementById('periodoSimples').value);
+            
+            if (!capital || !taxa || !periodo) {
+                alert('Por favor, preencha todos os campos');
+                return;
+            }
+            
+            const juros = capital * (taxa / 100) * periodo;
+            const montante = capital + juros;
+            
+            const result = document.getElementById('resultSimples');
+            result.className = 'result-box show';
+            result.innerHTML = `
+                <h3>Resultado - Juros Simples</h3>
+                <p><strong>Capital Inicial:</strong> ${formatarMoeda(capital)} Kz</p>
+                <p><strong>Taxa:</strong> ${taxa}% ao ano</p>
+                <p><strong>Período:</strong> ${periodo} anos</p>
+                <p><strong>Juros:</strong> ${formatarMoeda(juros)} Kz</p>
+                <p style="font-size: 20px; color: #667eea;"><strong>Montante Final:</strong> ${formatarMoeda(montante)} Kz</p>
+            `;
+        }
+
+        function calcularJurosCompostos() {
+            const capital = parseFloat(document.getElementById('capitalComposto').value);
+            const taxa = parseFloat(document.getElementById('taxaComposto').value);
+            const periodo = parseFloat(document.getElementById('periodoComposto').value);
+            
+            if (!capital || !taxa || !periodo) {
+                alert('Por favor, preencha todos os campos');
+                return;
+            }
+            
+            const montante = capital * Math.pow(1 + taxa / 100, periodo);
+            const juros = montante - capital;
+            
+            const result = document.getElementById('resultComposto');
+            result.className = 'result-box show';
+            result.innerHTML = `
+                <h3>Resultado - Juros Compostos</h3>
+                <p><strong>Capital Inicial:</strong> ${formatarMoeda(capital)} Kz</p>
+                <p><strong>Taxa:</strong> ${taxa}% ao ano</p>
+                <p><strong>Período:</strong> ${periodo} anos</p>
+                <p><strong>Juros:</strong> ${formatarMoeda(juros)} Kz</p>
+                <p style="font-size: 20px; color: #667eea;"><strong>Montante Final:</strong> ${formatarMoeda(montante)} Kz</p>
+            `;
+        }
+
+        function calcularAmortizacao() {
+            const valor = parseFloat(document.getElementById('valorEmprestimo').value);
+            const taxaMensal = parseFloat(document.getElementById('taxaMensal').value) / 100;
+            const parcelas = parseInt(document.getElementById('numParcelas').value);
+            
+            if (!valor || !taxaMensal || !parcelas) {
+                alert('Por favor, preencha todos os campos');
+                return;
+            }
+            
+            const prestacao = valor * (taxaMensal * Math.pow(1 + taxaMensal, parcelas)) / (Math.pow(1 + taxaMensal, parcelas) - 1);
+            const totalPago = prestacao * parcelas;
+            const totalJuros = totalPago - valor;
+            
+            const result = document.getElementById('resultAmortizacao');
+            result.className = 'result-box show';
+            result.innerHTML = `
+                <h3>Resultado - Sistema Price (Tabela Price)</h3>
+                <p><strong>Valor do Empréstimo:</strong> ${formatarMoeda(valor)} Kz</p>
+                <p><strong>Taxa Mensal:</strong> ${(taxaMensal * 100).toFixed(2)}%</p>
+                <p><strong>Número de Parcelas:</strong> ${parcelas}</p>
+                <p style="font-size: 20px; color: #667eea;"><strong>Valor da Parcela:</strong> ${formatarMoeda(prestacao)} Kz</p>
+                <p><strong>Total a Pagar:</strong> ${formatarMoeda(totalPago)} Kz</p>
+                <p><strong>Total de Juros:</strong> ${formatarMoeda(totalJuros)} Kz</p>
+            `;
+        }
+    </script>
+</body>
+</html>

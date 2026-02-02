@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Balanço Patrimonial - Trabalho de Matemática 11º Inforgest</title>
+</head>
+<body>
+    <nav class="nav-bar" aria-label="Main navigation">
+        <div class="nav-inner">
+            <a class="brand" href="./maths.html">Calculadora</a>
+            <button class="nav-toggle" aria-expanded="false" aria-label="Open menu">
+                <span class="hamburger"></span>
+            </button>
+            <ul class="nav-links" role="menubar">
+                <li role="none"><a role="menuitem" href="maths.html">Científica</a></li>
+                <li role="none"><a role="menuitem" href="financeira.html">Financeira</a></li>
+                <li class="dropdown" role="none">
+                    <button class="drop-btn" aria-haspopup="true" aria-expanded="false">Análise de Balanço ▾</button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li role="none"><a role="menuitem" href="b-patrimonial.html">Balanço Patrimonial</a></li>
+                        <li role="none"><a role="menuitem" href="b-sintetico.html">Balanço Sintético</a></li>
+                        <li role="none"><a role="menuitem" href="b-analitico.html">Balanço Analítico</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown" role="none">
+                    <button class="drop-btn" aria-haspopup="true" aria-expanded="false">Sucessões ▾</button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li role="none"><a role="menuitem" href="s-geometrica.html">Geométrica (PG)</a></li>
+                        <li role="none"><a role="menuitem" href="s-aritmetica.html">Aritmética (PA)</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="balanco-container">
+        <h2 class="balanco-title"> Balanço Patrimonial</h2>
+        <p style="text-align: center; color: #666; margin-bottom: 30px;">Relatório contábil que detalha os bens, direitos e obrigações de uma empresa</p>
+        
+        <div class="balanco-grid">
+            <div class="balanco-section">
+                <h3>ATIVO</h3>
+                <p style="font-size: 14px; color: #666; margin-bottom: 10px;">Ativo Não Corrente</p>
+                <div id="ativoNaoCorrente">
+                    <div class="input-row">
+                        <input type="text" class="ativo-nc-desc" placeholder="Ex: Imobilizado" value="Imobilizado">
+                        <input type="number" class="ativo-nc-val" placeholder="Valor (Kz)">
+                    </div>
+                </div>
+                <button class="btn-add" onclick="addAtivoNC()">+ Adicionar Ativo Não Corrente</button>
+                
+                <p style="font-size: 14px; color: #666; margin: 20px 0 10px 0;">Ativo Corrente</p>
+                <div id="ativoCorrente">
+                    <div class="input-row">
+                        <input type="text" class="ativo-c-desc" placeholder="Ex: Caixa e Bancos" value="Caixa e Bancos">
+                        <input type="number" class="ativo-c-val" placeholder="Valor (Kz)">
+                    </div>
+                </div>
+                <button class="btn-add" onclick="addAtivoC()">+ Adicionar Ativo Corrente</button>
+            </div>
+
+            <div class="balanco-section">
+                <h3>CAPITAL PRÓPRIO E PASSIVO</h3>
+                <p style="font-size: 14px; color: #666; margin-bottom: 10px;">Capital Próprio</p>
+                <div id="capitalProprio">
+                    <div class="input-row">
+                        <input type="text" class="cp-desc" placeholder="Ex: Capital Social" value="Capital Social">
+                        <input type="number" class="cp-val" placeholder="Valor (Kz)">
+                    </div>
+                </div>
+                <button class="btn-add" onclick="addCP()">+ Adicionar Capital Próprio</button>
+                
+                <p style="font-size: 14px; color: #666; margin: 20px 0 10px 0;">Passivo</p>
+                <div id="passivo">
+                    <div class="input-row">
+                        <input type="text" class="passivo-desc" placeholder="Ex: Empréstimos" value="Empréstimos">
+                        <input type="number" class="passivo-val" placeholder="Valor (Kz)">
+                    </div>
+                </div>
+                <button class="btn-add" onclick="addPassivo()">+ Adicionar Passivo</button>
+            </div>
+        </div>
+
+        <button class="btn-calcular" onclick="gerarBalanco()">Gerar Balanço Patrimonial</button>
+        
+        <div id="resultBalanco" class="balanco-result"></div>
+    </div>
+
+    <footer>&copy; 2025-26 Grupo Nº1 Inforgest - Trabalho de Matemática</footer>
+
+    <script src="nav.js"></script>
+    <script>
+        function formatarMoeda(valor) {
+            return valor.toLocaleString('pt-AO', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function addAtivoNC() {
+            const container = document.getElementById('ativoNaoCorrente');
+            const newRow = document.createElement('div');
+            newRow.className = 'input-row';
+            newRow.innerHTML = `
+                <input type="text" class="ativo-nc-desc" placeholder="Descrição">
+                <input type="number" class="ativo-nc-val" placeholder="Valor (Kz)">
+                <button class="btn-remove" onclick="this.parentElement.remove()">×</button>
+            `;
+            container.appendChild(newRow);
+        }
+
+        function addAtivoC() {
+            const container = document.getElementById('ativoCorrente');
+            const newRow = document.createElement('div');
+            newRow.className = 'input-row';
+            newRow.innerHTML = `
+                <input type="text" class="ativo-c-desc" placeholder="Descrição">
+                <input type="number" class="ativo-c-val" placeholder="Valor (Kz)">
+                <button class="btn-remove" onclick="this.parentElement.remove()">×</button>
+            `;
+            container.appendChild(newRow);
+        }
+
+        function addCP() {
+            const container = document.getElementById('capitalProprio');
+            const newRow = document.createElement('div');
+            newRow.className = 'input-row';
+            newRow.innerHTML = `
+                <input type="text" class="cp-desc" placeholder="Descrição">
+                <input type="number" class="cp-val" placeholder="Valor (Kz)">
+                <button class="btn-remove" onclick="this.parentElement.remove()">×</button>
+            `;
+            container.appendChild(newRow);
+        }
+
+        function addPassivo() {
+            const container = document.getElementById('passivo');
+            const newRow = document.createElement('div');
+            newRow.className = 'input-row';
+            newRow.innerHTML = `
+                <input type="text" class="passivo-desc" placeholder="Descrição">
+                <input type="number" class="passivo-val" placeholder="Valor (Kz)">
+                <button class="btn-remove" onclick="this.parentElement.remove()">×</button>
+            `;
+            container.appendChild(newRow);
+        }
+
+        function gerarBalanco() {
+            // Coletar Ativo Não Corrente
+            const ativoNCDesc = document.querySelectorAll('.ativo-nc-desc');
+            const ativoNCVal = document.querySelectorAll('.ativo-nc-val');
+            let ativosNC = [];
+            let totalAtivoNC = 0;
+            
+            for (let i = 0; i < ativoNCDesc.length; i++) {
+                if (ativoNCDesc[i].value && ativoNCVal[i].value) {
+                    const valor = parseFloat(ativoNCVal[i].value);
+                    ativosNC.push({desc: ativoNCDesc[i].value, valor: valor});
+                    totalAtivoNC += valor;
+                }
+            }
+            
+            // Coletar Ativo Corrente
+            const ativoCDesc = document.querySelectorAll('.ativo-c-desc');
+            const ativoCVal = document.querySelectorAll('.ativo-c-val');
+            let ativosC = [];
+            let totalAtivoC = 0;
+            
+            for (let i = 0; i < ativoCDesc.length; i++) {
+                if (ativoCDesc[i].value && ativoCVal[i].value) {
+                    const valor = parseFloat(ativoCVal[i].value);
+                    ativosC.push({desc: ativoCDesc[i].value, valor: valor});
+                    totalAtivoC += valor;
+                }
+            }
+            
+            // Coletar Capital Próprio
+            const cpDesc = document.querySelectorAll('.cp-desc');
+            const cpVal = document.querySelectorAll('.cp-val');
+            let capitalProprio = [];
+            let totalCP = 0;
+            
+            for (let i = 0; i < cpDesc.length; i++) {
+                if (cpDesc[i].value && cpVal[i].value) {
+                    const valor = parseFloat(cpVal[i].value);
+                    capitalProprio.push({desc: cpDesc[i].value, valor: valor});
+                    totalCP += valor;
+                }
+            }
+            
+            // Coletar Passivo
+            const passivoDesc = document.querySelectorAll('.passivo-desc');
+            const passivoVal = document.querySelectorAll('.passivo-val');
+            let passivos = [];
+            let totalPassivo = 0;
+            
+            for (let i = 0; i < passivoDesc.length; i++) {
+                if (passivoDesc[i].value && passivoVal[i].value) {
+                    const valor = parseFloat(passivoVal[i].value);
+                    passivos.push({desc: passivoDesc[i].value, valor: valor});
+                    totalPassivo += valor;
+                }
+            }
+            
+            const totalAtivo = totalAtivoNC + totalAtivoC;
+            const totalCPPassivo = totalCP + totalPassivo;
+            const diferenca = totalAtivo - totalCPPassivo;
+            
+            let resultHTML = `
+                <h3 style="text-align: center; color: #667eea; margin-bottom: 20px;">BALANÇO PATRIMONIAL</h3>
+                <p style="text-align: center; color: #666; margin-bottom: 30px;">Estrutura conforme normas contabilísticas</p>
+                
+                <table class="balanco-table">
+                    <thead>
+                        <tr>
+                            <th colspan="2">ATIVO</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background: #e9ecef; font-weight: 600;">
+                            <td colspan="2">ATIVO NÃO CORRENTE</td>
+                        </tr>
+                        ${ativosNC.map(a => `<tr><td>${a.desc}</td><td style="text-align: right;">${formatarMoeda(a.valor)} Kz</td></tr>`).join('') || '<tr><td colspan="2" style="text-align: center; color: #999;">Sem dados</td></tr>'}
+                        <tr style="background: #f8f9fa; font-weight: 600;">
+                            <td>Subtotal Ativo Não Corrente</td>
+                            <td style="text-align: right;">${formatarMoeda(totalAtivoNC)} Kz</td>
+                        </tr>
+                        <tr style="background: #e9ecef; font-weight: 600;">
+                            <td colspan="2">ATIVO CORRENTE</td>
+                        </tr>
+                        ${ativosC.map(a => `<tr><td>${a.desc}</td><td style="text-align: right;">${formatarMoeda(a.valor)} Kz</td></tr>`).join('') || '<tr><td colspan="2" style="text-align: center; color: #999;">Sem dados</td></tr>'}
+                        <tr style="background: #f8f9fa; font-weight: 600;">
+                            <td>Subtotal Ativo Corrente</td>
+                            <td style="text-align: right;">${formatarMoeda(totalAtivoC)} Kz</td>
+                        </tr>
+                        <tr class="total-row" style="background: #667eea; color: white;">
+                            <td><strong>TOTAL DO ATIVO</strong></td>
+                            <td style="text-align: right;"><strong>${formatarMoeda(totalAtivo)} Kz</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <table class="balanco-table" style="margin-top: 30px;">
+                    <thead>
+                        <tr>
+                            <th colspan="2">CAPITAL PRÓPRIO E PASSIVO</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background: #e9ecef; font-weight: 600;">
+                            <td colspan="2">CAPITAL PRÓPRIO</td>
+                        </tr>
+                        ${capitalProprio.map(c => `<tr><td>${c.desc}</td><td style="text-align: right;">${formatarMoeda(c.valor)} Kz</td></tr>`).join('') || '<tr><td colspan="2" style="text-align: center; color: #999;">Sem dados</td></tr>'}
+                        <tr style="background: #f8f9fa; font-weight: 600;">
+                            <td>Subtotal Capital Próprio</td>
+                            <td style="text-align: right;">${formatarMoeda(totalCP)} Kz</td>
+                        </tr>
+                        <tr style="background: #e9ecef; font-weight: 600;">
+                            <td colspan="2">PASSIVO</td>
+                        </tr>
+                        ${passivos.map(p => `<tr><td>${p.desc}</td><td style="text-align: right;">${formatarMoeda(p.valor)} Kz</td></tr>`).join('') || '<tr><td colspan="2" style="text-align: center; color: #999;">Sem dados</td></tr>'}
+                        <tr style="background: #f8f9fa; font-weight: 600;">
+                            <td>Subtotal Passivo</td>
+                            <td style="text-align: right;">${formatarMoeda(totalPassivo)} Kz</td>
+                        </tr>
+                        <tr class="total-row" style="background: #667eea; color: white;">
+                            <td><strong>TOTAL DO CAPITAL PRÓPRIO E PASSIVO</strong></td>
+                            <td style="text-align: right;"><strong>${formatarMoeda(totalCPPassivo)} Kz</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                ${diferenca !== 0 ? 
+                    `<p style="color: #dc3545; margin-top: 20px; text-align: center; font-weight: 600; font-size: 18px;">
+                        ⚠️ ATENÇÃO: Diferença de ${formatarMoeda(Math.abs(diferenca))} Kz<br>
+                        O balanço deve estar equilibrado!
+                    </p>` : 
+                    `<p style="color: #28a745; margin-top: 20px; text-align: center; font-weight: 600; font-size: 18px;">
+                        ✓ BALANÇO EQUILIBRADO!
+                    </p>`
+                }
+            `;
+            
+            const result = document.getElementById('resultBalanco');
+            result.className = 'balanco-result show';
+            result.innerHTML = resultHTML;
+        }
+    </script>
+</body>
+</html>

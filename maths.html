@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Calculadora Científica - Trabalho de Matemática 11º Inforgest</title>
+</head>
+<body>
+    <nav class="nav-bar" aria-label="Main navigation">
+        <div class="nav-inner">
+            <a class="brand" href="./maths.html">Calculadora</a>
+            <button class="nav-toggle" aria-expanded="false" aria-label="Open menu">
+                <span class="hamburger"></span>
+            </button>
+            <ul class="nav-links" role="menubar">
+                <li role="none"><a role="menuitem" href="maths.html">Científica</a></li>
+                <li role="none"><a role="menuitem" href="financeira.html">Financeira</a></li>
+                <li class="dropdown" role="none">
+                    <button class="drop-btn" aria-haspopup="true" aria-expanded="false">Análise de Balanço ▾</button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li role="none"><a role="menuitem" href="b-patrimonial.html">Balanço Patrimonial</a></li>
+                        <li role="none"><a role="menuitem" href="b-sintetico.html">Balanço Sintético</a></li>
+                        <li role="none"><a role="menuitem" href="b-analitico.html">Balanço Analítico</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown" role="none">
+                    <button class="drop-btn" aria-haspopup="true" aria-expanded="false">Sucessões ▾</button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li role="none"><a role="menuitem" href="s-geometrica.html">Geométrica (PG)</a></li>
+                        <li role="none"><a role="menuitem" href="s-aritmetica.html">Aritmética (PA)</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div id="tela-calculos">
+        <section id="tela">
+            <div id="res">0</div>
+        </section>
+    </div>
+    
+    <div id="teclado">
+        <div class="board" role="group" aria-label="calculator keys">
+            <!-- Clear e Apagar -->
+            <button class="tecla accao" data-value="limpar">C</button>
+            <button class="tecla accao" data-value="apagar">⌫</button>
+
+            <!-- Memória -->
+            <button class="tecla accao" data-value="mc">MC</button>
+            <button class="tecla accao" data-value="mr">MR</button>
+            <button class="tecla accao" data-value="mplus">M+</button>
+            <button class="tecla accao" data-value="mminus">M-</button>
+            <button class="tecla accao" data-value="deg">DEG</button>
+
+            <!-- Funções -->
+            <button class="tecla functions" data-value="sin">sin</button>
+            <button class="tecla functions" data-value="cos">cos</button>
+            <button class="tecla functions" data-value="tan">tan</button>
+            <button class="tecla functions" data-value="asin">asin</button>
+            <button class="tecla functions" data-value="acos">acos</button>
+
+            <button class="tecla functions" data-value="ln">ln</button>
+            <button class="tecla functions" data-value="log">log</button>
+            <button class="tecla functions" data-value="^">^</button>
+            <button class="tecla functions" data-value="sqrt">√</button>
+            <button class="tecla functions" data-value="exp">exp</button>
+
+            <button class="tecla" data-value="(">(</button>
+            <button class="tecla" data-value=")">)</button>
+            <button class="tecla" data-value="!">!</button>
+            <button class="tecla const" data-value="pi">π</button>
+            <button class="tecla const" data-value="e">e</button>
+
+            <button class="tecla num" data-value="7">7</button>
+            <button class="tecla num" data-value="8">8</button>
+            <button class="tecla num" data-value="9">9</button>
+            <button class="tecla operador" data-value="/">÷</button>
+            <button class="tecla operador" data-value="*">×</button>
+
+            <button class="tecla num" data-value="4">4</button>
+            <button class="tecla num" data-value="5">5</button>
+            <button class="tecla num" data-value="6">6</button>
+            <button class="tecla operador" data-value="-">−</button>
+            <button class="tecla" data-value=".">.</button>
+
+            <button class="tecla num" data-value="1">1</button>
+            <button class="tecla num" data-value="2">2</button>
+            <button class="tecla num" data-value="3">3</button>
+            <button class="tecla operador" data-value="+">+</button>
+
+            <button class="tecla wide num" data-value="0">0</button>
+            <button class="tecla" data-value="ans">Ans</button>
+            <button class="tecla accao tall" data-value="eval">=</button>
+        </div>
+
+        <div class="scientific-panel" role="group" aria-label="scientific keys">
+            <button class="tecla functions" data-value="pow">x²</button>
+            <button class="tecla functions" data-value="abs">|x|</button>
+            <button class="tecla functions" data-value="sinh">sinh</button>
+            <button class="tecla functions" data-value="cosh">cosh</button>
+            <button class="tecla functions" data-value="tanh">tanh</button>
+            <button class="tecla functions" data-value="atan">atan</button>
+        </div>
+    </div>
+    
+    <footer>&copy; 2025-26 Grupo Nº1 Inforgest - Trabalho de Matemática</footer>
+    
+    <script src="nav.js"></script>
+    <script src="maths.js"></script>
+</body>
+</html>

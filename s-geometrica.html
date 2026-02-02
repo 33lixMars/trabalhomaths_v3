@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Sucessão Geométrica - Trabalho de Matemática 11º Inforgest</title>
+</head>
+<body>
+    <nav class="nav-bar" aria-label="Main navigation">
+        <div class="nav-inner">
+            <a class="brand" href="./maths.html">Calculadora</a>
+            <button class="nav-toggle" aria-expanded="false" aria-label="Open menu">
+                <span class="hamburger"></span>
+            </button>
+            <ul class="nav-links" role="menubar">
+                <li role="none"><a role="menuitem" href="maths.html">Científica</a></li>
+                <li role="none"><a role="menuitem" href="financeira.html">Financeira</a></li>
+                <li class="dropdown" role="none">
+                    <button class="drop-btn" aria-haspopup="true" aria-expanded="false">Análise de Balanço ▾</button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li role="none"><a role="menuitem" href="b-patrimonial.html">Balanço Patrimonial</a></li>
+                        <li role="none"><a role="menuitem" href="b-sintetico.html">Balanço Sintético</a></li>
+                        <li role="none"><a role="menuitem" href="b-analitico.html">Balanço Analítico</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown" role="none">
+                    <button class="drop-btn" aria-haspopup="true" aria-expanded="false">Sucessões ▾</button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li role="none"><a role="menuitem" href="s-geometrica.html">Geométrica (PG)</a></li>
+                        <li role="none"><a role="menuitem" href="s-aritmetica.html">Aritmética (PA)</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="sucessoes-container">
+        <h2 class="balanco-title"> Progressão Geométrica (PG)</h2>
+        
+        <div class="form-group">
+            <label>Primeiro Termo (U₁):</label>
+            <input type="number" id="a1_pg" placeholder="Ex: 2" step="any">
+        </div>
+        
+        <div class="form-group">
+            <label>Razão (q):</label>
+            <input type="number" id="q_pg" placeholder="Ex: 3" step="any">
+        </div>
+        
+        <div class="form-group">
+            <label>Número de Termos (n):</label>
+            <input type="number" id="n_pg" placeholder="Ex: 8">
+        </div>
+        
+        <button class="btn-calcular" onclick="calcularPG()">Calcular Progressão Geométrica</button>
+        
+        <div id="resultPG" class="result-box"></div>
+    </div>
+
+    <div class="calculator-about">
+        <div class="calculator-about_wrapper">
+            <h2>O que é uma Progressão Geométrica?</h2>
+            
+            <p>Uma <strong>Progressão Geométrica (PG)</strong> é uma sequência numérica em que cada termo, a partir do segundo, é obtido multiplicando o termo anterior por uma constante chamada <strong>razão (q)</strong>.</p>
+            
+            <h3 style="margin-top: 25px;">Fórmulas Importantes</h3>
+            
+            <p><strong>Termo Geral:</strong><br>
+            Uₙ = U₁ × q^(n-1)<br>
+            Onde:<br>
+            • Uₙ = termo que queremos encontrar<br>
+            • U₁ = primeiro termo<br>
+            • q = razão<br>
+            • n = posição do termo
+            </p>
+            
+            <p><strong>Soma dos n primeiros termos:</strong><br>
+            Quando q ≠ 1: Sₙ = U₁ × (q^n - 1) / (q - 1)<br>
+            Quando q = 1: Sₙ = n × a₁
+            </p>
+            
+            <h3 style="margin-top: 25px;">Exemplos</h3>
+            
+            <p><strong>Exemplo 1:</strong> PG (2, 6, 18, 54, ...)<br>
+            • Primeiro termo: U₁ = 2<br>
+            • Razão: q = 3 (6/2 = 3)<br>
+            • 5º termo: a₅ = 2 × 3⁴ = 2 × 81 = 162
+            </p>
+            
+            <p><strong>Exemplo 2:</strong> PG (100, 50, 25, 12.5, ...)<br>
+            • Primeiro termo: U₁ = 100<br>
+            • Razão: q = 0.5 (50/100 = 0.5)<br>
+            • Esta é uma PG decrescente
+            </p>
+            
+            <h3 style="margin-top: 25px;">Tipos de PG</h3>
+            
+            <p><strong>PG Crescente:</strong> q > 1 (os termos aumentam)<br>
+            Exemplo: 2, 4, 8, 16, 32...
+            </p>
+            
+            <p><strong>PG Decrescente:</strong> 0 < q < 1 (os termos diminuem)<br>
+            Exemplo: 100, 50, 25, 12.5...
+            </p>
+            
+            <p><strong>PG Constante:</strong> q = 1 (todos os termos são iguais)<br>
+            Exemplo: 5, 5, 5, 5...
+            </p>
+            
+            <p><strong>PG Oscilante:</strong> q < 0 (os termos alternam sinais)<br>
+            Exemplo: 3, -6, 12, -24...
+            </p>
+        </div>
+    </div>
+
+    <footer>&copy; 2025 Grupo Nº1 Inforgest - Trabalho de Matemática</footer>
+
+    <script src="nav.js"></script>
+    <script>
+        function calcularPG() {
+            const a1 = parseFloat(document.getElementById('a1_pg').value);
+            const q = parseFloat(document.getElementById('q_pg').value);
+            const n = parseInt(document.getElementById('n_pg').value);
+            
+            if (isNaN(a1) || isNaN(q) || isNaN(n)) {
+                alert('Por favor, preencha todos os campos');
+                return;
+            }
+            
+            if (n <= 0) {
+                alert('O número de termos deve ser maior que zero');
+                return;
+            }
+            
+            // Calcular último termo
+            const an = a1 * Math.pow(q, n - 1);
+            
+            // Calcular soma
+            let soma;
+            if (q === 1) {
+                soma = n * a1;
+            } else {
+                soma = a1 * (Math.pow(q, n) - 1) / (q - 1);
+            }
+            
+            // Gerar primeiros termos
+            let termos = [];
+            for (let i = 0; i < Math.min(n, 15); i++) {
+                termos.push((a1 * Math.pow(q, i)).toFixed(4));
+            }
+            
+            // Determinar tipo de PG
+            let tipoPG;
+            if (q > 1) {
+                tipoPG = 'Crescente';
+            } else if (q === 1) {
+                tipoPG = 'Constante';
+            } else if (q > 0 && q < 1) {
+                tipoPG = 'Decrescente';
+            } else if (q < 0) {
+                tipoPG = 'Oscilante';
+            } else {
+                tipoPG = 'Indefinida';
+            }
+            
+            const result = document.getElementById('resultPG');
+            result.className = 'result-box show';
+            result.innerHTML = `
+                <h3>Resultado - Progressão Geométrica</h3>
+                <p><strong>Primeiro termo (a₁):</strong> ${a1}</p>
+                <p><strong>Razão (q):</strong> ${q}</p>
+                <p><strong>Número de termos (n):</strong> ${n}</p>
+                <p><strong>Tipo de PG:</strong> ${tipoPG}</p>
+                <hr style="margin: 15px 0; border: none; border-top: 1px solid #ddd;">
+                <p style="font-size: 18px; color: #667eea;"><strong>Último termo (a${n}):</strong> ${an.toFixed(4)}</p>
+                <p style="font-size: 18px; color: #667eea;"><strong>Soma dos ${n} termos (Sₙ):</strong> ${soma.toFixed(4)}</p>
+                <hr style="margin: 15px 0; border: none; border-top: 1px solid #ddd;">
+                <p><strong>Primeiros ${Math.min(n, 15)} termos:</strong></p>
+                <p style="background: #f0f0f0; padding: 10px; border-radius: 5px; font-family: monospace;">
+                    ${termos.join(', ')}${n > 15 ? '...' : ''}
+                </p>
+                <hr style="margin: 15px 0; border: none; border-top: 1px solid #ddd;">
+                <p><strong>Fórmula do termo geral:</strong><br>
+                aₙ = ${a1} × ${q}^(n-1)</p>
+                <p><strong>Fórmula da soma:</strong><br>
+                ${q !== 1 ? `Sₙ = ${a1} × (${q}^n - 1) / (${q} - 1)` : `Sₙ = ${n} × ${a1}`}</p>
+            `;
+        }
+    </script>
+</body>
+</html>

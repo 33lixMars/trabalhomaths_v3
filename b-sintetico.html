@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Balanço Sintético - Trabalho de Matemática 11º Inforgest</title>
+</head>
+<body>
+    <nav class="nav-bar" aria-label="Main navigation">
+        <div class="nav-inner">
+            <a class="brand" href="./maths.html">Calculadora</a>
+            <button class="nav-toggle" aria-expanded="false" aria-label="Open menu">
+                <span class="hamburger"></span>
+            </button>
+            <ul class="nav-links" role="menubar">
+                <li role="none"><a role="menuitem" href="maths.html">Científica</a></li>
+                <li role="none"><a role="menuitem" href="financeira.html">Financeira</a></li>
+                <li class="dropdown" role="none">
+                    <button class="drop-btn" aria-haspopup="true" aria-expanded="false">Análise de Balanço ▾</button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li role="none"><a role="menuitem" href="b-patrimonial.html">Balanço Patrimonial</a></li>
+                        <li role="none"><a role="menuitem" href="b-sintetico.html">Balanço Sintético</a></li>
+                        <li role="none"><a role="menuitem" href="b-analitico.html">Balanço Analítico</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown" role="none">
+                    <button class="drop-btn" aria-haspopup="true" aria-expanded="false">Sucessões ▾</button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li role="none"><a role="menuitem" href="s-geometrica.html">Geométrica (PG)</a></li>
+                        <li role="none"><a role="menuitem" href="s-aritmetica.html">Aritmética (PA)</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="balanco-container">
+        <h2 class="balanco-title"> Balanço Sintético</h2>
+        <p style="text-align: center; color: #666; margin-bottom: 30px;">Versão resumida do balanço patrimonial</p>
+        
+        <div class="balanco-grid">
+            <div class="balanco-section">
+                <h3>ATIVO</h3>
+                <div class="form-group">
+                    <label>Ativo Total (Kz):</label>
+                    <input type="number" id="ativoTotal" placeholder="Ex: 50000000">
+                </div>
+            </div>
+
+            <div class="balanco-section">
+                <h3>PASSIVO E CAPITAL PRÓPRIO</h3>
+                <div class="form-group">
+                    <label>Passivo Total (Kz):</label>
+                    <input type="number" id="passivoTotal" placeholder="Ex: 30000000">
+                </div>
+                <div class="form-group">
+                    <label>Capital Próprio (Kz):</label>
+                    <input type="number" id="capitalProprio" placeholder="Ex: 20000000">
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-calcular" onclick="gerarBalancoSintetico()">Gerar Balanço Sintético</button>
+        
+        <div id="resultBalanco" class="balanco-result"></div>
+    </div>
+
+    <footer>&copy; 2025-26 Grupo Nº1 Inforgest - Trabalho de Matemática</footer>
+
+    <script src="nav.js"></script>
+    <script>
+        function formatarMoeda(valor) {
+            return valor.toLocaleString('pt-AO', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function gerarBalancoSintetico() {
+            const ativoTotal = parseFloat(document.getElementById('ativoTotal').value) || 0;
+            const passivoTotal = parseFloat(document.getElementById('passivoTotal').value) || 0;
+            const capitalProprio = parseFloat(document.getElementById('capitalProprio').value) || 0;
+            
+            if (!ativoTotal && !passivoTotal && !capitalProprio) {
+                alert('Por favor, preencha pelo menos um campo');
+                return;
+            }
+            
+            const totalCPPassivo = passivoTotal + capitalProprio;
+            const diferenca = ativoTotal - totalCPPassivo;
+            
+            // Calcular índices financeiros
+            const liquidezGeral = passivoTotal > 0 ? (ativoTotal / passivoTotal) : 0;
+            const endividamento = ativoTotal > 0 ? ((passivoTotal / ativoTotal) * 100) : 0;
+            const participacaoCP = ativoTotal > 0 ? ((capitalProprio / ativoTotal) * 100) : 0;
+            
+            let resultHTML = `
+                <h3 style="text-align: center; color: #667eea; margin-bottom: 20px;">BALANÇO SINTÉTICO</h3>
+                
+                <table class="balanco-table">
+                    <thead>
+                        <tr>
+                            <th>ATIVO</th>
+                            <th style="text-align: right;">Valor (Kz)</th>
+                            <th>PASSIVO + CAPITAL PRÓPRIO</th>
+                            <th style="text-align: right;">Valor (Kz)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Ativo Total</td>
+                            <td style="text-align: right;">${formatarMoeda(ativoTotal)}</td>
+                            <td>Passivo</td>
+                            <td style="text-align: right;">${formatarMoeda(passivoTotal)}</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>Capital Próprio</td>
+                            <td style="text-align: right;">${formatarMoeda(capitalProprio)}</td>
+                        </tr>
+                        <tr class="total-row" style="background: #667eea; color: white;">
+                            <td><strong>TOTAL</strong></td>
+                            <td style="text-align: right;"><strong>${formatarMoeda(ativoTotal)} Kz</strong></td>
+                            <td><strong>TOTAL</strong></td>
+                            <td style="text-align: right;"><strong>${formatarMoeda(totalCPPassivo)} Kz</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                ${diferenca !== 0 ? 
+                    `<p style="color: #dc3545; margin-top: 20px; text-align: center; font-weight: 600; font-size: 18px;">
+                        ⚠️ ATENÇÃO: Diferença de ${formatarMoeda(Math.abs(diferenca))} Kz
+                    </p>` : 
+                    `<p style="color: #28a745; margin-top: 20px; text-align: center; font-weight: 600; font-size: 18px;">
+                        ✓ BALANÇO EQUILIBRADO!
+                    </p>`
+                }
+                
+                <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+                    <h3 style="color: #667eea; margin-bottom: 15px;">Índices Financeiros</h3>
+                    <p><strong>Liquidez Geral:</strong> ${liquidezGeral.toFixed(2)}</p>
+                    <p><strong>Endividamento:</strong> ${endividamento.toFixed(2)}%</p>
+                    <p><strong>Participação do Capital Próprio:</strong> ${participacaoCP.toFixed(2)}%</p>
+                </div>
+            `;
+            
+            const result = document.getElementById('resultBalanco');
+            result.className = 'balanco-result show';
+            result.innerHTML = resultHTML;
+        }
+    </script>
+</body>
+</html>
