@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=arrow_drop_down" />
+    <link rel="stylesheet" href="maths.css">
+    <title>Trabalho de Matematica 11º Inforgest</title>
+</head>
+<body>
+   <nav class="nav-bar" aria-label="Main navigation">
+        <div class="nav-inner">
+            <a class="brand" href="./maths.html">Calculadora</a>
+            <button class="nav-toggle" aria-expanded="false" aria-label="Open menu">
+                <span class="hamburger"></span>
+            </button>
+            <ul class="nav-links" role="menubar">
+                <li role="none"><a role="menuitem" href="maths.html">Científica</a></li>
+                <li role="none"><a role="menuitem" href="financeira.html">Financeira</a></li>
+                <li class="dropdown" role="none">
+                    <button class="drop-btn" aria-haspopup="true" aria-expanded="false">Análise de Balanço ▾</button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li role="none"><a role="menuitem" href="b-patrimonial.html">Balanço Patrimonial</a></li>
+                        <li role="none"><a role="menuitem" href="b-sintetico.html">Balanço Sintético</a></li>
+                        <li role="none"><a role="menuitem" href="b-analitico.html">Balanço Analítico</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown" role="none">
+                    <button class="drop-btn" aria-haspopup="true" aria-expanded="false">Sucessões ▾</button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li role="none"><a role="menuitem" href="s-ortogonometricas.html">Geometricas</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    
+    <div id="tela-calculos">
+        <section id="tela">
+            <div id="res"></div>
+        </section>
+    </div>
+    <footer>&copy; Grup Nº1 Inforgest</footer>
+    <script src="nav.js"></script>
+</body>
+</html>
