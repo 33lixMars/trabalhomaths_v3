@@ -9,7 +9,7 @@
 <body>
     <nav class="nav-bar" aria-label="Main navigation">
         <div class="nav-inner">
-            <a class="brand" href="./maths.html"> Calculadora</a>
+            <a class="brand" href="./maths.html">Calculadora</a>
             <button class="nav-toggle" aria-expanded="false" aria-label="Open menu">
                 <span class="hamburger"></span>
             </button>
@@ -36,7 +36,7 @@
     </nav>
 
     <div class="sucessoes-container">
-        <h2 class="balanco-title"> Progressão Geométrica (PG)</h2>
+        <h2 class="balanco-title">Progressão Geométrica (PG)</h2>
         
         <div class="form-group">
             <label>Selecione o que deseja calcular:</label>
@@ -179,7 +179,7 @@
         </div>
     </div>
 
-    <footer>&copy; 2025-26 Grupo Nº1 Inforgest - Trabalho de Matemática</footer>
+    <footer>&copy; 2025 Grupo Nº1 Inforgest - Trabalho de Matemática</footer>
 
     <script src="nav.js"></script>
     <script>
@@ -239,7 +239,48 @@
                 ],
                 termos: termos,
                 n: n,
-                formula: `aₙ = ${a1} × ${q}^(n-1)`
+                formula: `aₙ = a₁ × q^(n-1)`,
+                explicacao: `
+                    <div style="background: #e7f3ff; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                        <h4 style="color: #0066cc; margin-bottom: 10px;">Explicação do Cálculo:</h4>
+                        
+                        <p><strong>1. Cálculo do termo aₙ:</strong></p>
+                        <p style="font-family: monospace; margin-left: 20px;">
+                            aₙ = a₁ × q^(n-1)<br>
+                            a${n} = ${a1} × ${q}^(${n}-1)<br>
+                            a${n} = ${a1} × ${q}^${n-1}<br>
+                            a${n} = ${a1} × ${Math.pow(q, n-1).toFixed(6)}<br>
+                            a${n} = ${an.toFixed(4)}
+                        </p>
+                        
+                        <p style="margin-top: 10px;"><strong>2. Cálculo da soma Sₙ:</strong></p>
+                        ${q !== 1 ? `
+                            <p style="font-family: monospace; margin-left: 20px;">
+                                Sₙ = a₁ × (q^n - 1) / (q - 1)<br>
+                                S${n} = ${a1} × (${q}^${n} - 1) / (${q} - 1)<br>
+                                S${n} = ${a1} × (${Math.pow(q, n).toFixed(6)} - 1) / ${(q - 1).toFixed(4)}<br>
+                                S${n} = ${a1} × ${(Math.pow(q, n) - 1).toFixed(6)} / ${(q - 1).toFixed(4)}<br>
+                                S${n} = ${soma.toFixed(4)}
+                            </p>
+                        ` : `
+                            <p style="margin-left: 20px;">Como q = 1 (PG constante), todos os termos são iguais a ${a1}.</p>
+                            <p style="font-family: monospace; margin-left: 20px;">
+                                Sₙ = n × a₁<br>
+                                S${n} = ${n} × ${a1}<br>
+                                S${n} = ${soma.toFixed(4)}
+                            </p>
+                        `}
+                        
+                        <p style="margin-top: 10px;"><strong>3. Características desta PG:</strong></p>
+                        <p style="margin-left: 20px;">
+                            • Tipo: <strong>${tipoPG}</strong><br>
+                            ${q > 1 ? '• Os termos aumentam progressivamente (cada termo é maior que o anterior)' : ''}
+                            ${q === 1 ? '• Todos os termos são iguais' : ''}
+                            ${q > 0 && q < 1 ? '• Os termos diminuem progressivamente (cada termo é menor que o anterior)' : ''}
+                            ${q < 0 ? '• Os termos alternam entre positivos e negativos' : ''}
+                        </p>
+                    </div>
+                `
             });
         }
 
@@ -263,7 +304,29 @@
                 return;
             }
             
-            const q = Math.pow(an / a1, 1 / (n - 1));
+            // Verifica se os sinais são compatíveis
+            if ((a1 > 0 && an < 0) || (a1 < 0 && an > 0)) {
+                if ((n - 1) % 2 === 0) {
+                    alert('Com estes valores e n ímpar, a razão seria negativa elevada a expoente par, resultando em valor positivo. Verifique os dados.');
+                }
+            }
+            
+            // Calcula q = (an/a1)^(1/(n-1))
+            const razao = an / a1;
+            const expoente = 1 / (n - 1);
+            let q;
+            
+            if (razao < 0 && (n - 1) % 2 === 0) {
+                alert('Não é possível calcular raiz de índice par de número negativo nos reais');
+                return;
+            }
+            
+            if (razao < 0) {
+                // Raiz de índice ímpar de número negativo
+                q = -Math.pow(Math.abs(razao), expoente);
+            } else {
+                q = Math.pow(razao, expoente);
+            }
             
             const soma = q === 1 ? n * a1 : a1 * (Math.pow(q, n) - 1) / (q - 1);
             
@@ -271,6 +334,9 @@
             for (let i = 0; i < Math.min(n, 10); i++) {
                 termos.push((a1 * Math.pow(q, i)).toFixed(4));
             }
+            
+            const verificacao = a1 * Math.pow(q, n - 1);
+            const erro = Math.abs(verificacao - an);
             
             mostrarResultadoPG({
                 titulo: 'Cálculo da Razão',
@@ -281,11 +347,54 @@
                 ],
                 resultados: [
                     `Razão calculada (q): ${q.toFixed(6)}`,
+                    `Verificação: a${n} = ${a1} × ${q.toFixed(6)}^${n-1} = ${verificacao.toFixed(4)}`,
+                    `Diferença: ${erro < 0.0001 ? 'Desprezível (< 0.0001)' : erro.toFixed(6)}`,
                     `Soma dos ${n} termos: ${soma.toFixed(4)}`
                 ],
                 termos: termos,
                 n: n,
-                formula: `q = ⁿ⁻¹√(aₙ/a₁) = ${n-1}√(${an}/${a1})`
+                formula: `q = ⁿ⁻¹√(aₙ/a₁)`,
+                explicacao: `
+                    <div style="background: #e7f3ff; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                        <h4 style="color: #0066cc; margin-bottom: 10px;">📚 Explicação do Cálculo:</h4>
+                        
+                        <p><strong>1. Fórmula do termo geral da PG:</strong></p>
+                        <p style="font-family: monospace; margin-left: 20px;">aₙ = a₁ × q^(n-1)</p>
+                        
+                        <p style="margin-top: 10px;"><strong>2. Isolando q:</strong></p>
+                        <p style="font-family: monospace; margin-left: 20px;">
+                            aₙ = a₁ × q^(n-1)<br>
+                            aₙ/a₁ = q^(n-1)<br>
+                            q = ⁿ⁻¹√(aₙ/a₁)
+                        </p>
+                        
+                        <p style="margin-top: 10px;"><strong>3. Substituindo os valores:</strong></p>
+                        <p style="font-family: monospace; margin-left: 20px;">
+                            q = ${n-1}√(${an}/${a1})<br>
+                            q = ${n-1}√(${razao.toFixed(4)})<br>
+                            q = (${razao.toFixed(4)})^(1/${n-1})<br>
+                            q = (${razao.toFixed(4)})^${expoente.toFixed(6)}<br>
+                            q = ${q.toFixed(6)}
+                        </p>
+                        
+                        <p style="margin-top: 10px;"><strong>4. Verificação:</strong></p>
+                        <p style="font-family: monospace; margin-left: 20px;">
+                            Calculando a${n} = a₁ × q^(${n}-1):<br>
+                            a${n} = ${a1} × ${q.toFixed(6)}^${n-1}<br>
+                            a${n} = ${a1} × ${Math.pow(q, n-1).toFixed(6)}<br>
+                            a${n} = ${verificacao.toFixed(6)}<br>
+                            <br>
+                            Valor esperado: ${an}<br>
+                            Valor calculado: ${verificacao.toFixed(6)}<br>
+                            Diferença: ${erro < 0.0001 ? '✓ Desprezível!' : erro.toFixed(6)}
+                        </p>
+                        
+                        <p style="margin-top: 10px;"><strong>5. Interpretação:</strong></p>
+                        <p style="margin-left: 20px;">
+                            Com razão q = ${q.toFixed(6)}, cada termo da PG é obtido multiplicando o anterior por ${q.toFixed(6)}.
+                        </p>
+                    </div>
+                `
             });
         }
 
@@ -309,7 +418,9 @@
                 return;
             }
             
-            const a1 = an / Math.pow(q, n - 1);
+            // Calcula a1 = an / q^(n-1)
+            const expoente = n - 1;
+            const a1 = an / Math.pow(q, expoente);
             
             const soma = q === 1 ? n * a1 : a1 * (Math.pow(q, n) - 1) / (q - 1);
             
@@ -317,6 +428,10 @@
             for (let i = 0; i < Math.min(n, 10); i++) {
                 termos.push((a1 * Math.pow(q, i)).toFixed(4));
             }
+            
+            // Verificação
+            const verificacao = a1 * Math.pow(q, n - 1);
+            const erro = Math.abs(verificacao - an);
             
             mostrarResultadoPG({
                 titulo: 'Cálculo do Primeiro Termo',
@@ -327,11 +442,38 @@
                 ],
                 resultados: [
                     `Primeiro termo calculado (a₁): ${a1.toFixed(6)}`,
+                    `Verificação: a${n} = ${a1.toFixed(6)} × ${q}^${n-1} = ${verificacao.toFixed(6)}`,
+                    `Diferença: ${erro < 0.0001 ? 'Desprezível (< 0.0001)' : erro.toFixed(6)}`,
                     `Soma dos ${n} termos: ${soma.toFixed(4)}`
                 ],
                 termos: termos,
                 n: n,
-                formula: `a₁ = aₙ / q^(n-1) = ${an} / ${q}^${n-1}`
+                formula: `a₁ = aₙ / q^(n-1) = ${an} / ${q}^${n-1} = ${an} / ${Math.pow(q, n-1).toFixed(4)}`,
+                explicacao: `
+                    <div style="background: #e7f3ff; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                        <h4 style="color: #0066cc; margin-bottom: 10px;">Explicação do Cálculo:</h4>
+                        <p><strong>1. Fórmula do termo geral da PG:</strong></p>
+                        <p style="font-family: monospace; margin-left: 20px;">aₙ = a₁ × q^(n-1)</p>
+                        
+                        <p style="margin-top: 10px;"><strong>2. Isolando a₁:</strong></p>
+                        <p style="font-family: monospace; margin-left: 20px;">a₁ = aₙ / q^(n-1)</p>
+                        
+                        <p style="margin-top: 10px;"><strong>3. Substituindo os valores:</strong></p>
+                        <p style="font-family: monospace; margin-left: 20px;">
+                            a₁ = ${an} / ${q}^(${n}-1)<br>
+                            a₁ = ${an} / ${q}^${n-1}<br>
+                            a₁ = ${an} / ${Math.pow(q, n-1).toFixed(4)}<br>
+                            a₁ = ${a1.toFixed(6)}
+                        </p>
+                        
+                        <p style="margin-top: 10px;"><strong>4. Verificação (calculando aₙ novamente):</strong></p>
+                        <p style="font-family: monospace; margin-left: 20px;">
+                            a${n} = ${a1.toFixed(6)} × ${q}^${n-1}<br>
+                            a${n} = ${a1.toFixed(6)} × ${Math.pow(q, n-1).toFixed(4)}<br>
+                            a${n} = ${verificacao.toFixed(6)} ✓
+                        </p>
+                    </div>
+                `
             });
         }
 
@@ -345,12 +487,41 @@
                 return;
             }
             
-            if (a1 === 0 || q === 0 || q === 1) {
-                alert('Para este cálculo, a₁ e q devem ser diferentes de zero, e q deve ser diferente de 1');
+            if (a1 === 0) {
+                alert('O primeiro termo não pode ser zero');
                 return;
             }
             
-            const n = Math.log(an / a1) / Math.log(q) + 1;
+            if (q === 0) {
+                alert('A razão não pode ser zero');
+                return;
+            }
+            
+            if (q === 1) {
+                if (a1 === an) {
+                    alert('Em uma PG constante (q=1), todos os termos são iguais a ' + a1);
+                } else {
+                    alert('Com q=1, todos os termos devem ser iguais. Não existe posição válida para aₙ=' + an);
+                }
+                return;
+            }
+            
+            // n = log(an/a1) / log(q) + 1
+            const razao = an / a1;
+            
+            if (razao <= 0) {
+                alert('Para este cálculo, aₙ/a₁ deve ser positivo');
+                return;
+            }
+            
+            if (q < 0) {
+                alert('Para este cálculo com logaritmos, q deve ser positivo e diferente de 1');
+                return;
+            }
+            
+            const logRazao = Math.log(razao);
+            const logQ = Math.log(q);
+            const n = logRazao / logQ + 1;
             
             if (n < 1 || !isFinite(n)) {
                 alert('Não foi possível calcular uma posição válida com estes valores');
@@ -359,6 +530,8 @@
             
             const nInteiro = Math.round(n);
             const verificacao = a1 * Math.pow(q, nInteiro - 1);
+            const erro = Math.abs(verificacao - an);
+            const percErro = (erro / an) * 100;
             
             mostrarResultadoPG({
                 titulo: 'Cálculo da Posição',
@@ -368,12 +541,63 @@
                     `Razão (q): ${q}`
                 ],
                 resultados: [
-                    `Posição calculada (n): ${n.toFixed(2)} ${nInteiro !== n ? '≈ ' + nInteiro : ''}`,
-                    `Verificação: a${nInteiro} = ${verificacao.toFixed(6)}`
+                    `Posição calculada (n): ${n.toFixed(4)}`,
+                    `Posição aproximada (inteiro): ${nInteiro}`,
+                    `<span style="color: ${erro < 0.01 ? '#28a745' : '#dc3545'};">Verificação: O termo na posição ${nInteiro} vale ${verificacao.toFixed(6)}</span>`,
+                    `Diferença absoluta: ${erro.toFixed(6)} (${percErro < 0.01 ? '<0.01' : percErro.toFixed(2)}%)`
                 ],
                 termos: [],
                 n: nInteiro,
-                formula: `n = log(aₙ/a₁) / log(q) + 1 = log(${an}/${a1}) / log(${q}) + 1`
+                formula: `n = log(aₙ/a₁) / log(q) + 1`,
+                explicacao: `
+                    <div style="background: #e7f3ff; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                        <h4 style="color: #0066cc; margin-bottom: 10px;">Explicação do Cálculo:</h4>
+                        
+                        <p><strong>1. Fórmula do termo geral da PG:</strong></p>
+                        <p style="font-family: monospace; margin-left: 20px;">aₙ = a₁ × q^(n-1)</p>
+                        
+                        <p style="margin-top: 10px;"><strong>2. Isolando n (aplicando logaritmo):</strong></p>
+                        <p style="font-family: monospace; margin-left: 20px;">
+                            aₙ = a₁ × q^(n-1)<br>
+                            aₙ/a₁ = q^(n-1)<br>
+                            log(aₙ/a₁) = log(q^(n-1))<br>
+                            log(aₙ/a₁) = (n-1) × log(q)<br>
+                            n-1 = log(aₙ/a₁) / log(q)<br>
+                            n = log(aₙ/a₁) / log(q) + 1
+                        </p>
+                        
+                        <p style="margin-top: 10px;"><strong>3. Substituindo os valores:</strong></p>
+                        <p style="font-family: monospace; margin-left: 20px;">
+                            n = log(${an}/${a1}) / log(${q}) + 1<br>
+                            n = log(${razao.toFixed(4)}) / log(${q}) + 1<br>
+                            n = ${logRazao.toFixed(6)} / ${logQ.toFixed(6)} + 1<br>
+                            n = ${(logRazao/logQ).toFixed(6)} + 1<br>
+                            n = ${n.toFixed(6)}
+                        </p>
+                        
+                        <p style="margin-top: 10px;"><strong>4. Interpretação do resultado:</strong></p>
+                        <p style="margin-left: 20px;">
+                            ${Math.abs(n - nInteiro) < 0.001 ? 
+                                `O valor ${an} está <strong>exatamente</strong> na posição ${nInteiro} da progressão.` :
+                                `O valor ${an} está <strong>entre</strong> as posições ${Math.floor(n)} e ${Math.ceil(n)}.<br>
+                                A posição mais próxima é ${nInteiro}, onde o termo vale ${verificacao.toFixed(6)}.`
+                            }
+                        </p>
+                        
+                        <p style="margin-top: 10px;"><strong>5. Verificação:</strong></p>
+                        <p style="font-family: monospace; margin-left: 20px;">
+                            Calculando a${nInteiro} = a₁ × q^(${nInteiro}-1):<br>
+                            a${nInteiro} = ${a1} × ${q}^${nInteiro-1}<br>
+                            a${nInteiro} = ${a1} × ${Math.pow(q, nInteiro-1).toFixed(6)}<br>
+                            a${nInteiro} = ${verificacao.toFixed(6)}<br>
+                            <br>
+                            Comparando com o valor procurado:<br>
+                            Procurado: ${an}<br>
+                            Encontrado: ${verificacao.toFixed(6)}<br>
+                            Erro: ${erro < 0.0001 ? 'Praticamente zero!' : erro.toFixed(6) + ' (' + (percErro < 0.01 ? '<0.01' : percErro.toFixed(2)) + '%)'}
+                        </p>
+                    </div>
+                `
             });
         }
 
@@ -394,6 +618,7 @@
                 ` : ''}
                 <hr style="margin: 15px 0; border: none; border-top: 1px solid #ddd;">
                 <p><strong>Fórmula utilizada:</strong><br>${dados.formula}</p>
+                ${dados.explicacao || ''}
             `;
         }
     </script>
