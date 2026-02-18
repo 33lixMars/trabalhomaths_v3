@@ -44,7 +44,7 @@
                 <option value="termo_soma">Calcular aₙ e Sₙ (fórmula: aₙ = a₁ × q^(n-1))</option>
                 <option value="razao">Calcular razão q (fórmula: q = ⁿ⁻¹√(aₙ/a₁))</option>
                 <option value="primeiro_termo">Calcular a₁ (fórmula: a₁ = aₙ / q^(n-1))</option>
-                <option value="posicao">Calcular n (fórmula: n = log(aₙ/a₁)/log(q) + 1)</option>
+                <option value="posicao">Calcular n (método: aₙ/a₁ = q^(n-1))</option>
             </select>
         </div>
 
@@ -356,7 +356,7 @@
                 formula: `q = ⁿ⁻¹√(aₙ/a₁)`,
                 explicacao: `
                     <div style="background: #e7f3ff; padding: 15px; border-radius: 8px; margin-top: 15px;">
-                        <h4 style="color: #0066cc; margin-bottom: 10px;">📚 Explicação do Cálculo:</h4>
+                        <h4 style="color: #0066cc; margin-bottom: 10px;">Explicação do Cálculo:</h4>
                         
                         <p><strong>1. Fórmula do termo geral da PG:</strong></p>
                         <p style="font-family: monospace; margin-left: 20px;">aₙ = a₁ × q^(n-1)</p>
@@ -498,7 +498,7 @@
             }
             
             if (q === 1) {
-                if (a1 === an) {
+                if (Math.abs(a1 - an) < 0.0001) {
                     alert('Em uma PG constante (q=1), todos os termos são iguais a ' + a1);
                 } else {
                     alert('Com q=1, todos os termos devem ser iguais. Não existe posição válida para aₙ=' + an);
@@ -506,32 +506,40 @@
                 return;
             }
             
-            // n = log(an/a1) / log(q) + 1
             const razao = an / a1;
+            let n = 1;
+            let encontrado = false;
             
-            if (razao <= 0) {
-                alert('Para este cálculo, aₙ/a₁ deve ser positivo');
+            // Método por aproximação sucessiva
+            // Testamos valores crescentes de n até encontrar o termo
+            for (let teste = 1; teste <= 200; teste++) {
+                const termoTeste = a1 * Math.pow(q, teste - 1);
+                const distancia = Math.abs(termoTeste - an);
+                
+                if (distancia < 0.0001 * Math.abs(an) || distancia < 0.0001) {
+                    n = teste;
+                    encontrado = true;
+                    break;
+                }
+                
+                // Se passou muito do valor procurado, parar
+                if (q > 1 && termoTeste > an * 2) break;
+                if (q < 1 && q > 0 && termoTeste < an / 2) break;
+            }
+            
+            if (!encontrado) {
+                alert('Não foi possível encontrar uma posição exata. O termo pode não fazer parte desta PG.');
                 return;
             }
             
-            if (q < 0) {
-                alert('Para este cálculo com logaritmos, q deve ser positivo e diferente de 1');
-                return;
-            }
-            
-            const logRazao = Math.log(razao);
-            const logQ = Math.log(q);
-            const n = logRazao / logQ + 1;
-            
-            if (n < 1 || !isFinite(n)) {
-                alert('Não foi possível calcular uma posição válida com estes valores');
-                return;
-            }
-            
-            const nInteiro = Math.round(n);
+            const nInteiro = n;
             const verificacao = a1 * Math.pow(q, nInteiro - 1);
             const erro = Math.abs(verificacao - an);
-            const percErro = (erro / an) * 100;
+            const percErro = (erro / Math.abs(an)) * 100;
+            
+            // Termos vizinhos
+            const termoAnterior = nInteiro > 1 ? a1 * Math.pow(q, nInteiro - 2) : null;
+            const termoPosterior = a1 * Math.pow(q, nInteiro);
             
             mostrarResultadoPG({
                 titulo: 'Cálculo da Posição',
@@ -541,14 +549,15 @@
                     `Razão (q): ${q}`
                 ],
                 resultados: [
-                    `Posição calculada (n): ${n.toFixed(4)}`,
-                    `Posição aproximada (inteiro): ${nInteiro}`,
-                    `<span style="color: ${erro < 0.01 ? '#28a745' : '#dc3545'};">Verificação: O termo na posição ${nInteiro} vale ${verificacao.toFixed(6)}</span>`,
-                    `Diferença absoluta: ${erro.toFixed(6)} (${percErro < 0.01 ? '<0.01' : percErro.toFixed(2)}%)`
-                ],
+                    `Posição encontrada: n = ${nInteiro}`,
+                    `<span style="color: ${erro < 0.01 ? '#28a745' : '#dc3545'};">Termo na posição ${nInteiro}: ${verificacao.toFixed(6)}</span>`,
+                    `Diferença: ${erro.toFixed(8)} (${percErro < 0.01 ? '<0.01' : percErro.toFixed(4)}%)`,
+                    termoAnterior !== null ? `Termo anterior (a${nInteiro-1}): ${termoAnterior.toFixed(6)}` : '',
+                    `Termo posterior (a${nInteiro+1}): ${termoPosterior.toFixed(6)}`
+                ].filter(r => r !== ''),
                 termos: [],
                 n: nInteiro,
-                formula: `n = log(aₙ/a₁) / log(q) + 1`,
+                formula: `Método: aₙ = a₁ × q^(n-1), testando valores de n`,
                 explicacao: `
                     <div style="background: #e7f3ff; padding: 15px; border-radius: 8px; margin-top: 15px;">
                         <h4 style="color: #0066cc; margin-bottom: 10px;">Explicação do Cálculo:</h4>
@@ -556,45 +565,40 @@
                         <p><strong>1. Fórmula do termo geral da PG:</strong></p>
                         <p style="font-family: monospace; margin-left: 20px;">aₙ = a₁ × q^(n-1)</p>
                         
-                        <p style="margin-top: 10px;"><strong>2. Isolando n (aplicando logaritmo):</strong></p>
-                        <p style="font-family: monospace; margin-left: 20px;">
-                            aₙ = a₁ × q^(n-1)<br>
-                            aₙ/a₁ = q^(n-1)<br>
-                            log(aₙ/a₁) = log(q^(n-1))<br>
-                            log(aₙ/a₁) = (n-1) × log(q)<br>
-                            n-1 = log(aₙ/a₁) / log(q)<br>
-                            n = log(aₙ/a₁) / log(q) + 1
-                        </p>
-                        
-                        <p style="margin-top: 10px;"><strong>3. Substituindo os valores:</strong></p>
-                        <p style="font-family: monospace; margin-left: 20px;">
-                            n = log(${an}/${a1}) / log(${q}) + 1<br>
-                            n = log(${razao.toFixed(4)}) / log(${q}) + 1<br>
-                            n = ${logRazao.toFixed(6)} / ${logQ.toFixed(6)} + 1<br>
-                            n = ${(logRazao/logQ).toFixed(6)} + 1<br>
-                            n = ${n.toFixed(6)}
-                        </p>
-                        
-                        <p style="margin-top: 10px;"><strong>4. Interpretação do resultado:</strong></p>
+                        <p style="margin-top: 10px;"><strong>2. Método de busca por aproximação:</strong></p>
                         <p style="margin-left: 20px;">
-                            ${Math.abs(n - nInteiro) < 0.001 ? 
-                                `O valor ${an} está <strong>exatamente</strong> na posição ${nInteiro} da progressão.` :
-                                `O valor ${an} está <strong>entre</strong> as posições ${Math.floor(n)} e ${Math.ceil(n)}.<br>
-                                A posição mais próxima é ${nInteiro}, onde o termo vale ${verificacao.toFixed(6)}.`
-                            }
+                            Como queremos encontrar n tal que a₁ × q^(n-1) = aₙ,<br>
+                            testamos valores sucessivos de n até encontrar o termo procurado.
                         </p>
                         
-                        <p style="margin-top: 10px;"><strong>5. Verificação:</strong></p>
+                        <p style="margin-top: 10px;"><strong>3. Teste de valores:</strong></p>
+                        <p style="font-family: monospace; margin-left: 20px; background: white; padding: 10px; border-radius: 5px;">
+                            n=1: a₁ = ${a1} × ${q}^0 = ${a1}<br>
+                            ${nInteiro > 2 ? `n=2: a₂ = ${a1} × ${q}^1 = ${(a1 * q).toFixed(6)}<br>` : ''}
+                            ${nInteiro > 3 ? `...<br>` : ''}
+                            n=${nInteiro}: a${nInteiro} = ${a1} × ${q}^${nInteiro-1} = ${verificacao.toFixed(6)} ✓
+                        </p>
+                        
+                        <p style="margin-top: 10px;"><strong>4. Verificação da posição encontrada:</strong></p>
                         <p style="font-family: monospace; margin-left: 20px;">
-                            Calculando a${nInteiro} = a₁ × q^(${nInteiro}-1):<br>
-                            a${nInteiro} = ${a1} × ${q}^${nInteiro-1}<br>
-                            a${nInteiro} = ${a1} × ${Math.pow(q, nInteiro-1).toFixed(6)}<br>
-                            a${nInteiro} = ${verificacao.toFixed(6)}<br>
-                            <br>
-                            Comparando com o valor procurado:<br>
-                            Procurado: ${an}<br>
-                            Encontrado: ${verificacao.toFixed(6)}<br>
-                            Erro: ${erro < 0.0001 ? 'Praticamente zero!' : erro.toFixed(6) + ' (' + (percErro < 0.01 ? '<0.01' : percErro.toFixed(2)) + '%)'}
+                            Valor procurado: ${an}<br>
+                            Valor encontrado: ${verificacao.toFixed(6)}<br>
+                            Diferença: ${erro.toFixed(8)} ${erro < 0.0001 ? '✓ Praticamente zero!' : ''}
+                        </p>
+                        
+                        <p style="margin-top: 10px;"><strong>5. Contexto (termos vizinhos):</strong></p>
+                        <p style="font-family: monospace; margin-left: 20px; background: white; padding: 10px; border-radius: 5px;">
+                            ${termoAnterior !== null ? `a${nInteiro-1} = ${termoAnterior.toFixed(6)}<br>` : ''}
+                            <strong>a${nInteiro} = ${verificacao.toFixed(6)} ← Termo procurado</strong><br>
+                            a${nInteiro+1} = ${termoPosterior.toFixed(6)}
+                        </p>
+                        
+                        <p style="margin-top: 10px;"><strong>6. Conclusão:</strong></p>
+                        <p style="margin-left: 20px;">
+                            ${erro < 0.001 ? 
+                                `✓ O valor <strong>${an}</strong> está exatamente na posição <strong>${nInteiro}</strong> desta progressão geométrica.` :
+                                `O valor mais próximo de <strong>${an}</strong> nesta PG está na posição <strong>${nInteiro}</strong>.`
+                            }
                         </p>
                     </div>
                 `
